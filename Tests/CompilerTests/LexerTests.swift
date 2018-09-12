@@ -20,4 +20,12 @@ class LexerTests: XCTestCase {
   func testSpaceAndNumber() {
     expect(self.subject.tokenize("2  33 ")) == [.number("2"), .space(2), .number("33"), .space(1)]
   }
+
+  func testNewline() {
+    let input = """
+    123
+    445
+    """
+    expect(self.subject.tokenize(input)) == [.number("123"), .newline, .number("445")]
+  }
 }
