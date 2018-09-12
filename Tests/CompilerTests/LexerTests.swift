@@ -16,4 +16,8 @@ class LexerTests: XCTestCase {
   func testNumber() {
     expect(self.subject.tokenize("34")) == [.number("34")]
   }
+
+  func testSpaceAndNumber() {
+    expect(self.subject.tokenize("2  33 ")) == [.number("2"), .space(2), .number("33"), .space(1)]
+  }
 }
