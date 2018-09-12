@@ -1,13 +1,13 @@
 struct Lexer {
   func tokenize(_ source: String) -> [Token] {
-    return tokenize(remainder: source, acc: [])
-  }
+    var tokens: [Token] = []
+    var remainder = source
 
-  private func tokenize(remainder: String, acc: [Token]) -> [Token] {
-    guard let match = CharacterConsumer.consume(remainder) else {
-      return acc
+    while let match = CharacterConsumer.consume(remainder) {
+      tokens.append(match.token)
+      remainder = match.remainder ?? ""
     }
-    let tokens = acc + [match.token]
-    return tokenize(remainder: match.remainder ?? "", acc: tokens)
+
+    return tokens
   }
 }
