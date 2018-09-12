@@ -68,4 +68,12 @@ class LexerTests: XCTestCase {
   func testSubsequentDots() {
     expect(self.subject.tokenize("...")) == [.dot, .dot, .dot]
   }
+
+  func testComma() {
+    expect(self.subject.tokenize(",")) == [.comma]
+  }
+
+  func testSubsequentComma() {
+    expect(self.subject.tokenize(",,,,")) == [.comma, .comma, .comma, .comma]
+  }
 }

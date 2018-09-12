@@ -7,6 +7,7 @@ enum Token {
   case openSquare, closeSquare
   case openCurly, closeCurly
   case dot
+  case comma
 }
 
 extension Token: Equatable {
@@ -33,6 +34,8 @@ extension Token: Equatable {
     case (.closeCurly, .closeCurly):
       return true
     case (.dot, .dot):
+      return true
+    case (.comma, .comma):
       return true
     default:
       return false

@@ -3,7 +3,7 @@ import Foundation
 enum CharacterMatcher {
   case space, number, newline, `operator`,
        openParen, closeParen, openSquare, closeSquare, openCurly, closeCurly,
-       dot
+       dot, comma
 
   struct Match {
     let tokens: [Token]
@@ -48,6 +48,8 @@ enum CharacterMatcher {
       return "}" == char
     case .dot:
       return "." == char
+    case .comma:
+      return "," == char
     }
   }
 
@@ -75,10 +77,12 @@ enum CharacterMatcher {
       return (1...lexeme.count).map { _ in .closeCurly }
     case .dot:
       return (1...lexeme.count).map { _ in .dot }
+    case .comma:
+      return (1...lexeme.count).map { _ in .comma }
     }
   }
 
   private static var all: [CharacterMatcher] {
-    return [.space, .number, .newline, .operator, .openParen, .closeParen, .openSquare, .closeSquare, .openCurly, .closeCurly, .dot]
+    return [.space, .number, .newline, .operator, .openParen, .closeParen, .openSquare, .closeSquare, .openCurly, .closeCurly, .dot, .comma]
   }
 }
