@@ -1,4 +1,4 @@
-enum CharacterConsumer {
+enum CharacterMatcher {
   case space, number, newline, `operator`
 
   struct Match {
@@ -6,13 +6,13 @@ enum CharacterConsumer {
     let remainder: String?
   }
 
-  static func consume(_ source: String) -> Match? {
-    return all.reduce(nil) { match, consumer in
-      match ?? consumer.consume(source)
+  static func find(_ source: String) -> Match? {
+    return all.reduce(nil) { match, matcher in
+      match ?? matcher.find(source)
     }
   }
 
-  func consume(_ source: String) -> Match? {
+  func find(_ source: String) -> Match? {
     let iterator = CharacterIterator(source: source, predicate: predicate)
     guard let token = iterator.prefix.map(token) else {
       return nil
@@ -46,7 +46,7 @@ enum CharacterConsumer {
     }
   }
 
-  private static var all: [CharacterConsumer] {
+  private static var all: [CharacterMatcher] {
     return [.space, .number, .newline, .operator]
   }
 }
