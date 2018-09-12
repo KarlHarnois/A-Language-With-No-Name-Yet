@@ -48,4 +48,8 @@ class LexerTests: XCTestCase {
   func testCurlyBrackets() {
     expect(self.subject.tokenize("{}")) == [.openCurly, .closeCurly]
   }
+
+  func testDot() {
+    expect(self.subject.tokenize("1.4")) == [.number("1"), .dot, .number("4")]
+  }
 }
