@@ -5,6 +5,7 @@ enum Token {
   case `operator`(String)
   case openParen, closeParen
   case openSquare, closeSquare
+  case openCurly, closeCurly
 }
 
 extension Token: Equatable {
@@ -25,6 +26,10 @@ extension Token: Equatable {
     case (.openSquare, .openSquare):
       return true
     case (.closeSquare, .closeSquare):
+      return true
+    case (.openCurly, .openCurly):
+      return true
+    case (.closeCurly, .closeCurly):
       return true
     default:
       return false
