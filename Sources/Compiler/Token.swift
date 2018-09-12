@@ -1,5 +1,8 @@
 enum Token {
-  case space(Int), number(String), newline
+  case space(Int)
+  case number(String)
+  case newline
+  case `operator`(String)
 }
 
 extension Token: Equatable {
@@ -11,6 +14,8 @@ extension Token: Equatable {
       return a == b
     case (.newline, .newline):
       return true
+    case (let .operator(a), let .operator(b)):
+      return a == b
     default:
       return false
     }

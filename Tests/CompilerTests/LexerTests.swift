@@ -28,4 +28,12 @@ class LexerTests: XCTestCase {
     """
     expect(self.subject.tokenize(input)) == [.number("123"), .newline, .number("445")]
   }
+
+  func testOperator() {
+    expect(self.subject.tokenize("1 + 2")) == [.number("1"), .space(1), .operator("+"), .space(1), .number("2")]
+  }
+
+  func testMultiCharsOperator() {
+    expect(self.subject.tokenize("&&")) == [.operator("&&")]
+  }
 }

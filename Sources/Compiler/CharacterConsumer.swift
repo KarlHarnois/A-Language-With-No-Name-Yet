@@ -1,5 +1,5 @@
 enum CharacterConsumer {
-  case space, number, newline
+  case space, number, newline, `operator`
 
   struct Match {
     let token: Token
@@ -28,6 +28,8 @@ enum CharacterConsumer {
       return Int(char) != nil
     case .newline:
       return char == "\n"
+    case .operator:
+      return ["+", "-", "=", "/", "*", "&", "|"].contains(char)
     }
   }
 
@@ -39,10 +41,12 @@ enum CharacterConsumer {
       return .number(lexeme)
     case .newline:
       return .newline
+    case .operator:
+      return .operator(lexeme)
     }
   }
 
   private static var all: [CharacterConsumer] {
-    return [.space, .number, .newline]
+    return [.space, .number, .newline, .operator]
   }
 }
