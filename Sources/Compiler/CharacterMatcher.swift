@@ -60,25 +60,25 @@ enum CharacterMatcher {
     case .number:
       return [.number(lexeme)]
     case .newline:
-      return (1...lexeme.count).map { _ in .newline }
+      return lexeme.count.times { .newline }
     case .operator:
       return [.operator(lexeme)]
     case .openParen:
-      return (1...lexeme.count).map { _ in .openParen }
+      return lexeme.count.times { .openParen }
     case .closeParen:
-      return (1...lexeme.count).map { _ in .closeParen }
+      return lexeme.count.times { .closeParen }
     case .openSquare:
-      return (1...lexeme.count).map { _ in .openSquare }
+      return lexeme.count.times { .openSquare }
     case .closeSquare:
-      return (1...lexeme.count).map { _ in .closeSquare }
+      return lexeme.count.times { .closeSquare }
     case .openCurly:
-      return (1...lexeme.count).map { _ in .openCurly }
+      return lexeme.count.times { .openCurly }
     case .closeCurly:
-      return (1...lexeme.count).map { _ in .closeCurly }
+      return lexeme.count.times { .closeCurly }
     case .dot:
-      return (1...lexeme.count).map { _ in .dot }
+      return lexeme.count.times { .dot }
     case .comma:
-      return (1...lexeme.count).map { _ in .comma }
+      return lexeme.count.times { .comma }
     }
   }
 
