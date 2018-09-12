@@ -60,7 +60,7 @@ enum CharacterMatcher {
     case .number:
       return [.number(lexeme)]
     case .newline:
-      return [.newline]
+      return (1...lexeme.count).map { _ in .newline }
     case .operator:
       return [.operator(lexeme)]
     case .openParen:

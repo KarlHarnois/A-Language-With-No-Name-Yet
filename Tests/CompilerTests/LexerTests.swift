@@ -29,6 +29,15 @@ class LexerTests: XCTestCase {
     expect(self.subject.tokenize(input)) == [.number("123"), .newline, .number("445")]
   }
 
+  func testSubsequentNewlines() {
+    let input = """
+
+
+
+    """
+    expect(self.subject.tokenize(input)) == [.newline, .newline]
+  }
+
   func testOperator() {
     expect(self.subject.tokenize("1 + 2")) == [.number("1"), .space(1), .operator("+"), .space(1), .number("2")]
   }
