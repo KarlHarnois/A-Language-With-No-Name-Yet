@@ -41,15 +41,31 @@ class LexerTests: XCTestCase {
     expect(self.subject.tokenize("(1)")) == [.openParen, .number("1"), .closeParen]
   }
 
+  func testSubsequentParens() {
+    expect(self.subject.tokenize("(())")) == [.openParen, .openParen, .closeParen, .closeParen]
+  }
+
   func testSquareBrackets() {
     expect(self.subject.tokenize("[]")) == [.openSquare, .closeSquare]
+  }
+
+  func testSubsequentSquareBracket() {
+    expect(self.subject.tokenize("[[]]")) == [.openSquare, .openSquare, .closeSquare, .closeSquare]
   }
 
   func testCurlyBrackets() {
     expect(self.subject.tokenize("{}")) == [.openCurly, .closeCurly]
   }
 
+  func testSubsequentCurlyBrackets() {
+    expect(self.subject.tokenize("{{}}")) == [.openCurly, .openCurly, .closeCurly, .closeCurly]
+  }
+
   func testDot() {
     expect(self.subject.tokenize("1.4")) == [.number("1"), .dot, .number("4")]
+  }
+
+  func testSubsequentDots() {
+    expect(self.subject.tokenize("...")) == [.dot, .dot, .dot]
   }
 }

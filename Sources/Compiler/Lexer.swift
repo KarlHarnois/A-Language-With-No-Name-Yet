@@ -6,7 +6,7 @@ struct Lexer {
     var remainder = source
 
     while let match = matcher.find(remainder) {
-      tokens.append(match.token)
+      tokens += match.tokens
       remainder = match.remainder ?? ""
     }
 

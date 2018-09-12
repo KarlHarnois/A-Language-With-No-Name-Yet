@@ -6,7 +6,7 @@ enum CharacterMatcher {
        dot
 
   struct Match {
-    let token: Token
+    let tokens: [Token]
     let remainder: String?
   }
 
@@ -18,10 +18,10 @@ enum CharacterMatcher {
 
   func find(_ source: String) -> Match? {
     let iterator = CharacterIterator(source: source, predicate: predicate)
-    guard let token = iterator.prefix.map(token) else {
+    guard let tokens = iterator.prefix.map(tokens) else {
       return nil
     }
-    return Match(token: token, remainder: iterator.suffix)
+    return Match(tokens: tokens, remainder: iterator.suffix)
   }
 
   private func predicate(char: String) -> Bool {
@@ -51,30 +51,30 @@ enum CharacterMatcher {
     }
   }
 
-  private func token(lexeme: String) -> Token {
+  private func tokens(lexeme: String) -> [Token] {
     switch self {
     case .space:
-      return .space(lexeme.count)
+      return [.space(lexeme.count)]
     case .number:
-      return .number(lexeme)
+      return [.number(lexeme)]
     case .newline:
-      return .newline
+      return [.newline]
     case .operator:
-      return .operator(lexeme)
+      return [.operator(lexeme)]
     case .openParen:
-      return .openParen
+      return (1...lexeme.count).map { _ in .openParen }
     case .closeParen:
-      return .closeParen
+      return (1...lexeme.count).map { _ in .closeParen }
     case .openSquare:
-      return .openSquare
+      return (1...lexeme.count).map { _ in .openSquare }
     case .closeSquare:
-      return .closeSquare
+      return (1...lexeme.count).map { _ in .closeSquare }
     case .openCurly:
-      return .openCurly
+      return (1...lexeme.count).map { _ in .openCurly }
     case .closeCurly:
-      return .closeCurly
+      return (1...lexeme.count).map { _ in .closeCurly }
     case .dot:
-      return .dot
+      return (1...lexeme.count).map { _ in .dot }
     }
   }
 
