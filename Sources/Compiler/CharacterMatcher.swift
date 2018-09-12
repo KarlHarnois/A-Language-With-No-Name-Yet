@@ -1,5 +1,5 @@
 enum CharacterMatcher {
-  case space, number, newline, `operator`
+  case space, number, newline, `operator`, openParen, closeParen
 
   struct Match {
     let token: Token
@@ -30,6 +30,10 @@ enum CharacterMatcher {
       return char == "\n"
     case .operator:
       return ["+", "-", "=", "/", "*", "&", "|"].contains(char)
+    case .openParen:
+      return "(" == char
+    case .closeParen:
+      return ")" == char
     }
   }
 
@@ -43,10 +47,14 @@ enum CharacterMatcher {
       return .newline
     case .operator:
       return .operator(lexeme)
+    case .openParen:
+      return .openParen
+    case .closeParen:
+      return .closeParen
     }
   }
 
   private static var all: [CharacterMatcher] {
-    return [.space, .number, .newline, .operator]
+    return [.space, .number, .newline, .operator, .openParen, .closeParen]
   }
 }

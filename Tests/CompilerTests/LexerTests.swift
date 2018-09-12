@@ -36,4 +36,8 @@ class LexerTests: XCTestCase {
   func testMultiCharsOperator() {
     expect(self.subject.tokenize("&&")) == [.operator("&&")]
   }
+
+  func testParens() {
+    expect(self.subject.tokenize("(1)")) == [.openParen, .number("1"), .closeParen]
+  }
 }

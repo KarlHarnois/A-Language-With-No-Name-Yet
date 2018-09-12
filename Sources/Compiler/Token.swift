@@ -3,6 +3,7 @@ enum Token {
   case number(String)
   case newline
   case `operator`(String)
+  case openParen, closeParen
 }
 
 extension Token: Equatable {
@@ -16,6 +17,10 @@ extension Token: Equatable {
       return true
     case (let .operator(a), let .operator(b)):
       return a == b
+    case (.openParen, .openParen):
+      return true
+    case (.closeParen, .closeParen):
+      return true
     default:
       return false
     }
