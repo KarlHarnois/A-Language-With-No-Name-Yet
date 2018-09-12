@@ -40,4 +40,8 @@ class LexerTests: XCTestCase {
   func testParens() {
     expect(self.subject.tokenize("(1)")) == [.openParen, .number("1"), .closeParen]
   }
+
+  func testSquares() {
+    expect(self.subject.tokenize("[]")) == [.openSquare, .closeSquare]
+  }
 }

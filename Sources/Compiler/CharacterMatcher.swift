@@ -1,5 +1,7 @@
+import Foundation
+
 enum CharacterMatcher {
-  case space, number, newline, `operator`, openParen, closeParen
+  case space, number, newline, `operator`, openParen, closeParen, openSquare, closeSquare
 
   struct Match {
     let token: Token
@@ -34,6 +36,10 @@ enum CharacterMatcher {
       return "(" == char
     case .closeParen:
       return ")" == char
+    case .openSquare:
+      return "[" == char
+    case .closeSquare:
+      return "]" == char
     }
   }
 
@@ -51,10 +57,14 @@ enum CharacterMatcher {
       return .openParen
     case .closeParen:
       return .closeParen
+    case .openSquare:
+      return .openSquare
+    case .closeSquare:
+      return .closeSquare
     }
   }
 
   private static var all: [CharacterMatcher] {
-    return [.space, .number, .newline, .operator, .openParen, .closeParen]
+    return [.space, .number, .newline, .operator, .openParen, .closeParen, .openSquare, .closeSquare]
   }
 }
