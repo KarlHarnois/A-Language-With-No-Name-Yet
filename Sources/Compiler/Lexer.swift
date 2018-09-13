@@ -14,17 +14,17 @@ struct Lexer {
   }
 
   private func consumeToken(_ iter: StringIterator) -> Token? {
-    if let token = consumeSpace(iter) ?? consumeNewline(iter) ?? consumeOpenParen(iter) {
-      return token
-    } else if let token = consumeCloseParen(iter) ?? consumeOpenSquare(iter) ?? consumeCloseSquare(iter) {
-      return token
-    } else if let token = consumeOpenCurly(iter) ?? consumeCloseCurly(iter) ?? consumeNumber(iter) {
-      return token
-    } else if let token = consumeOperator(iter) ?? consumeDot(iter) ?? consumeComma(iter) {
-      return token
-    } else {
-      return nil
+    return tokenConsumers.reduce(nil) { token, consumer in
+      token ?? consumer(iter)
     }
+  }
+
+  private var tokenConsumers: [(StringIterator) -> Token?] {
+    return [
+      consumeSpace, consumeNewline, consumeOpenParen, consumeCloseParen,
+      consumeOpenSquare, consumeCloseSquare, consumeOpenCurly, consumeCloseCurly,
+      consumeNumber, consumeOperator, consumeDot, consumeComma
+    ]
   }
 
   private func consumeSpace(_ iter: StringIterator) -> Token? {
