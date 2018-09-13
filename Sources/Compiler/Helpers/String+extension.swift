@@ -1,3 +1,5 @@
+import Foundation
+
 extension String {
   var iterator: StringIterator {
     return StringIterator(self)

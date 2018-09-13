@@ -21,4 +21,17 @@ final class StringIterator {
   func next() {
     cursor += 1
   }
+
+  func consumeLexeme(maxSize: Int? = nil, where predicate: (String) -> Bool) -> String? {
+    var lexeme: String? = nil
+
+    while predicate(current) {
+      lexeme = (lexeme ?? "") + current
+      next()
+      guard !isDone else { break }
+      if lexeme?.count == maxSize { break }
+    }
+
+    return lexeme
+  }
 }

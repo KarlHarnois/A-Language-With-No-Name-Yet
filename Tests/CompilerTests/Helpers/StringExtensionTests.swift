@@ -4,7 +4,7 @@ import Nimble
 
 class StringExtensionTests: XCTestCase {
   func testSubscript() {
-    expect("123"[0]) == "3"
+    expect("123"[2]) == "3"
   }
 
   func testTrueMatch() {
