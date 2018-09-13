@@ -42,4 +42,13 @@ class StringIteratorTests: XCTestCase {
     subject.next()
     expect(self.subject.isDone) == false
   }
+
+  func testConsumeLexeme() {
+    expect(self.subject.consumeLexeme(where: { $0.match("[0-9]") })) == "123"
+  }
+
+  func testConsumeLexemeMoveCurrent() {
+    _ = subject.consumeLexeme(where: { $0 == "1" || $0 == "2"})
+    expect(self.subject.current) == "3"
+  }
 }
