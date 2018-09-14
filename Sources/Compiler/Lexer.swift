@@ -93,7 +93,7 @@ struct Lexer {
   }
 
   private func consumeLabel(_ iter: StringIterator) -> Token? {
-    return iter.consumeLexeme(where: {  $0.match("[a-zA-Z]") })
+    return iter.consumeLexeme(where: {  $0.match("[a-zA-Z]|_") })
       .map { .label($0) }
   }
 }

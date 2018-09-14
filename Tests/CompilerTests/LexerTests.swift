@@ -90,6 +90,10 @@ class LexerTests: XCTestCase {
     expect(self.subject.tokenize("hello world")) == [.label("hello"), .space(1), .label("world")]
   }
 
+  func testLabelWithUnderscore() {
+    expect(self.subject.tokenize("hello_world")) == [.label("hello_world")]
+  }
+
   func testColon() {
     expect(self.subject.tokenize("::")) == [.colon, .colon]
   }
@@ -100,13 +104,19 @@ class LexerTests: XCTestCase {
       next =>
         self cursor increment
         self current
+
+      set_cursor:c =>
+        self cursor = c
     """
 
     expect(self.subject.tokenize(src)) == [
       .label("class"), .space(1), .label("Iterator"), .space(1), .operator("=>"), .newline,
       .space(2), .label("next"), .space(1), .operator("=>"), .newline,
       .space(4), .label("self"), .space(1), .label("cursor"), .space(1), .label("increment"), .newline,
-      .space(4), .label("self"), .space(1), .label("current")
+      .space(4), .label("self"), .space(1), .label("current"), .newline,
+      .newline,
+      .space(2), .label("set_cursor"), .colon, .label("c"), .space(1), .operator("=>"), .newline,
+      .space(4), .label("self"), .space(1), .label("cursor"), .space(1), .operator("="), .space(1), .label("c")
     ]
   }
 }
