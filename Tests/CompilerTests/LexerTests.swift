@@ -90,6 +90,10 @@ class LexerTests: XCTestCase {
     expect(self.subject.tokenize("hello world")) == [.label("hello"), .space(1), .label("world")]
   }
 
+  func testColon() {
+    expect(self.subject.tokenize("::")) == [.colon, .colon]
+  }
+
   func testSourceCode() {
     let src = """
     class Iterator =>

@@ -21,9 +21,9 @@ struct Lexer {
 
   private var tokenConsumers: [(StringIterator) -> Token?] {
     return [
-      consumeSpace, consumeNewline, consumeOpenParen, consumeCloseParen,
-      consumeOpenSquare, consumeCloseSquare, consumeOpenCurly, consumeCloseCurly,
-      consumeNumber, consumeOperator, consumeDot, consumeComma, consumeLabel
+      consumeSpace, consumeNewline, consumeOpenParen, consumeCloseParen, consumeOpenSquare,
+      consumeCloseSquare, consumeOpenCurly, consumeCloseCurly, consumeNumber, consumeOperator,
+      consumeDot, consumeComma, consumeColon, consumeLabel
     ]
   }
 
@@ -85,6 +85,11 @@ struct Lexer {
   private func consumeComma(_ iter: StringIterator) -> Token? {
     return iter.consumeLexeme(maxSize: 1, where: { $0 == "," })
       .map { _ in .comma }
+  }
+
+  private func consumeColon(_ iter: StringIterator) -> Token? {
+    return iter.consumeLexeme(maxSize: 1, where: { $0 == ":" })
+      .map { _ in .colon }
   }
 
   private func consumeLabel(_ iter: StringIterator) -> Token? {

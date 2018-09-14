@@ -8,6 +8,7 @@ enum Token {
   case openCurly, closeCurly
   case dot
   case comma
+  case colon
   case label(String)
 }
 
@@ -37,6 +38,8 @@ extension Token: Equatable {
     case (.dot, .dot):
       return true
     case (.comma, .comma):
+      return true
+    case (.colon, .colon):
       return true
     case (let .label(a), let .label(b)):
       return a == b
