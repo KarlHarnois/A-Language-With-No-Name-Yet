@@ -85,4 +85,24 @@ class LexerTests: XCTestCase {
   func testSubsequentComma() {
     expect(self.subject.tokenize(",,,,")) == [.comma, .comma, .comma, .comma]
   }
+
+  func testLabel() {
+    expect(self.subject.tokenize("hello world")) == [.label("hello"), .space(1), .label("world")]
+  }
+
+  func testSourceCode() {
+    let src = """
+    class Iterator =>
+      next =>
+        self cursor increment
+        self current
+    """
+
+    expect(self.subject.tokenize(src)) == [
+      .label("class"), .space(1), .label("Iterator"), .space(1), .operator("=>"), .newline,
+      .space(2), .label("next"), .space(1), .operator("=>"), .newline,
+      .space(4), .label("self"), .space(1), .label("cursor"), .space(1), .label("increment"), .newline,
+      .space(4), .label("self"), .space(1), .label("current")
+    ]
+  }
 }

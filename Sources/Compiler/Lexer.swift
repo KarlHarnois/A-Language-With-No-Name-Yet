@@ -23,7 +23,7 @@ struct Lexer {
     return [
       consumeSpace, consumeNewline, consumeOpenParen, consumeCloseParen,
       consumeOpenSquare, consumeCloseSquare, consumeOpenCurly, consumeCloseCurly,
-      consumeNumber, consumeOperator, consumeDot, consumeComma
+      consumeNumber, consumeOperator, consumeDot, consumeComma, consumeLabel
     ]
   }
 
@@ -73,7 +73,7 @@ struct Lexer {
   }
 
   private func consumeOperator(_ iter: StringIterator) -> Token? {
-    return iter.consumeLexeme(where: { $0.match("^(\\+|-|\\*|\\/|\\||=|\\!|&+)") })
+    return iter.consumeLexeme(where: { $0.match("^(\\+|-|\\*|\\/|\\||=|\\!|&+|>|<)") })
       .map { .operator($0) }
   }
 
@@ -85,5 +85,10 @@ struct Lexer {
   private func consumeComma(_ iter: StringIterator) -> Token? {
     return iter.consumeLexeme(maxSize: 1, where: { $0 == "," })
       .map { _ in .comma }
+  }
+
+  private func consumeLabel(_ iter: StringIterator) -> Token? {
+    return iter.consumeLexeme(where: {  $0.match("[a-zA-Z]") })
+      .map { .label($0) }
   }
 }
