@@ -38,4 +38,8 @@ class TokenTests: XCTestCase {
   func testDifferentCurlyBrackets() {
     expect(Token.openCurly) != Token.closeCurly
   }
+
+  func testSpaceLexeme() {
+    expect(Token.space(4).lexeme) == "    "
+  }
 }
