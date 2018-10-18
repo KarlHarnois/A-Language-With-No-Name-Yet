@@ -11,6 +11,41 @@ enum Token {
   case colon
   case label(String)
   case quote
+
+  var lexeme: String {
+    switch self {
+    case .space(let count):
+      return (0..<count).reduce("") { acc, _ in acc + " " }
+    case .number(let val):
+      return val
+    case .newline:
+      return "\n"
+    case .operator(let val):
+      return val
+    case .openParen:
+      return "("
+    case .closeParen:
+      return ")"
+    case .openSquare:
+      return "["
+    case .closeSquare:
+      return "]"
+    case .openCurly:
+      return "{"
+    case .closeCurly:
+      return "}"
+    case .dot:
+      return "."
+    case .comma:
+      return ","
+    case .colon:
+      return ":"
+    case .label(let val):
+      return val
+    case .quote:
+      return "\""
+    }
+  }
 }
 
 extension Token: Equatable {

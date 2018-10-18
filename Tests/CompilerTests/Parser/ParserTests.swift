@@ -15,16 +15,22 @@ class ParserTests: XCTestCase {
   }
 
   func testNumberLiteral() {
-    expect(self.subject.parse([.number("3")])) == ProgramDeclaration(NumberLiteral("3"))
+    expect(self.subject.parse([.number("3")])) == ProgramDeclaration([
+      NumberLiteral("3")
+    ])
   }
 
-  func testUnaryMessageExpression() {
+  func testStringLiteral() {
+    let tokens: [Token] = [
+      .quote, .label("hello"), .space(1), .label("world"), .quote
+    ]
+    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+      StringLiteral("hello world")
+    ])
   }
 
-  func testBinaryMessageExpression() {
-  }
-
-  func testKeywordMessageExpression() {
-  }
+  func testUnaryMessageDeclaration() {}
+  func testBinaryMessageDeclaration() {}
+  func testKeywordMessageDeclaration() {}
 }
 
