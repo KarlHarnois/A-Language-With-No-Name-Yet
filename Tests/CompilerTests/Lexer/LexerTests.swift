@@ -98,6 +98,10 @@ class LexerTests: XCTestCase {
     expect(self.subject.tokenize("::")) == [.colon, .colon]
   }
 
+  func testQuotes() {
+    expect(self.subject.tokenize("\"\"")) == [.quote, .quote]
+  }
+
   func testSourceCode() {
     let src = """
     class Iterator =>

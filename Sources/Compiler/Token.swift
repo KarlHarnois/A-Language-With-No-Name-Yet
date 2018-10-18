@@ -10,6 +10,7 @@ enum Token {
   case comma
   case colon
   case label(String)
+  case quote
 }
 
 extension Token: Equatable {
@@ -43,6 +44,8 @@ extension Token: Equatable {
       return true
     case (let .label(a), let .label(b)):
       return a == b
+    case (.quote, .quote):
+      return true
     default:
       return false
     }
