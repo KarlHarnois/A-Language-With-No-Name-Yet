@@ -18,8 +18,11 @@ final class StringIterator {
     return cursor >= str.count
   }
 
-  func next() {
-    cursor += 1
+  @discardableResult
+  func next() -> String? {
+    guard !isDone else { return nil }
+    defer { cursor += 1 }
+    return current
   }
 
   func consumeLexeme(maxSize: Int? = nil, where predicate: (String) -> Bool) -> String? {

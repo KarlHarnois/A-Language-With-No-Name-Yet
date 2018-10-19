@@ -3,10 +3,8 @@ struct Parser {
     let program = ProgramDeclaration()
     let walker = TokenWalker(tokens)
 
-    while !walker.isDone {
-      if let node = walker.walk() {
-        program.add(node)
-      }
+    while let node = walker.walk() {
+      program.add(node)
     }
 
     return program
@@ -14,20 +12,16 @@ struct Parser {
 }
 
 final class TokenWalker {
-  private let tokens: [Token]
-  private var cursor = 0
+  private let iter: TokenIterator
 
   init(_ tokens: [Token]) {
-    self.tokens = tokens
-  }
-
-  var isDone: Bool {
-    return cursor >= tokens.count
+    iter = .init(tokens)
   }
 
   func walk() -> Node? {
-    let token = current
-    next()
+    guard let token = iter.next() else {
+      return nil
+    }
     switch token {
     case .number(let value):
       return NumberLiteral(value)
@@ -42,49 +36,55 @@ final class TokenWalker {
 
   private func createString() -> StringLiteral {
     var str = ""
-    while current != .quote {
-      str += current.lexeme
-      next()
+    while let token = iter.next() {
+      guard token != .quote else { break }
+      str += token.lexeme
     }
-    next()
     return StringLiteral(str)
   }
 
   private func createMessage() -> Node {
     let msg = UnaryMessageDeclaration(selector: createSelector())
-
-    while !isDone {
-      guard current != .label("msg") else { break }
+    while !iter.isDone {
+      guard iter.current != .label("msg") else { break }
       if let node = walk() {
         msg.add(node)
       }
     }
-
     return msg
   }
 
   private func createSelector() -> String {
     var selector = ""
-    while !isDone {
-      ignoreSpaces()
-      guard current != .operator("=>") else { break }
-      selector += current.lexeme
-      next()
+    while let token = iter.next() {
+      if case .space = token { continue }
+      guard token != .operator("=>") else { break }
+      selector += token.lexeme
     }
     return selector
   }
+}
 
-  private func ignoreSpaces() {
-    while case .space = current {
-      next()
-    }
+final class TokenIterator {
+  private let tokens: [Token]
+  private(set) var cursor = 0
+
+  init(_ tokens: [Token]) {
+    self.tokens = tokens
   }
 
-  private var current: Token {
+  @discardableResult
+  func next() -> Token? {
+    guard !isDone else { return nil }
+    defer { cursor += 1 }
+    return current
+  }
+
+  var isDone: Bool {
+    return cursor >= tokens.count
+  }
+
+  var current: Token {
     return tokens[cursor]
-  }
-
-  private func next() {
-    cursor += 1
   }
 }
