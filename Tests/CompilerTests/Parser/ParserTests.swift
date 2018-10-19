@@ -29,7 +29,35 @@ class ParserTests: XCTestCase {
     ])
   }
 
-  func testUnaryMessageDeclaration() {}
+  func testUnaryMessageDeclaration() {
+    let tokens = lexer.tokenize("msg get_age => 5")
+
+    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+      UnaryMessageDeclaration(selector: "get_age", [
+        NumberLiteral("5")
+      ])
+    ])
+  }
+
+  func testMultipleUnaryMessageDeclarations() {
+    let tokens = lexer.tokenize("""
+    msg get_age =>
+      11
+
+    msg get_name =>
+      "Jean"
+    """)
+
+    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+      UnaryMessageDeclaration(selector: "get_age", [
+        NumberLiteral("11")
+      ]),
+      UnaryMessageDeclaration(selector: "get_name", [
+        StringLiteral("Jean")
+      ])
+    ])
+  }
+
   func testBinaryMessageDeclaration() {}
   func testKeywordMessageDeclaration() {}
 }

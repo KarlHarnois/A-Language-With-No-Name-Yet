@@ -26,15 +26,17 @@ final class TokenWalker {
   }
 
   func walk() -> Node? {
-    switch current {
+    let token = current
+    next()
+    switch token {
     case .number(let value):
-      next()
       return NumberLiteral(value)
     case .quote:
-      next()
       return createString()
+    case .label("msg"):
+      return createMessage()
     default:
-      fatalError()
+      return nil
     }
   }
 
@@ -46,6 +48,36 @@ final class TokenWalker {
     }
     next()
     return StringLiteral(str)
+  }
+
+  private func createMessage() -> Node {
+    let msg = UnaryMessageDeclaration(selector: createSelector())
+
+    while !isDone {
+      guard current != .label("msg") else { break }
+      if let node = walk() {
+        msg.add(node)
+      }
+    }
+
+    return msg
+  }
+
+  private func createSelector() -> String {
+    var selector = ""
+    while !isDone {
+      ignoreSpaces()
+      guard current != .operator("=>") else { break }
+      selector += current.lexeme
+      next()
+    }
+    return selector
+  }
+
+  private func ignoreSpaces() {
+    while case .space = current {
+      next()
+    }
   }
 
   private var current: Token {
