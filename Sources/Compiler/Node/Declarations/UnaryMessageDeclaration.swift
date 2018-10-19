@@ -1,13 +1,6 @@
-final class UnaryMessageDeclaration: Declaration {
-  let selector: String
-
-  override var attributes: [String: Any] {
-    return ["selector": selector]
-  }
-
+final class UnaryMessageDeclaration: MessageDeclaration {
   init(selector: String, _ children: [Node] = []) {
-    self.selector = selector
-    super.init()
+    super.init(selector: selector)
     self.children = children
   }
 }

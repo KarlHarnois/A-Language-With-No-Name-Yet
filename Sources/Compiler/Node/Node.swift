@@ -19,9 +19,7 @@ class Node {
     return base
   }
 
-  var attributes: [String: Any] {
-    return [:]
-  }
+  internal var attributes: [String: Any] = [:]
 
   func add(_ node: Node) {
     node.parent = self
