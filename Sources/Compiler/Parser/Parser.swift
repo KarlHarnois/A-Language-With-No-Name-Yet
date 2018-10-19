@@ -1,7 +1,8 @@
 struct Parser {
   func parse(_ tokens: [Token]) -> Node {
     let program = ProgramDeclaration()
-    let walker = TokenWalker(tokens)
+    let iterator = TokenIterator(tokens)
+    let walker = TokenWalker(iterator)
 
     while let node = walker.walk() {
       program.add(node)
@@ -14,8 +15,8 @@ struct Parser {
 final class TokenWalker {
   private let iter: TokenIterator
 
-  init(_ tokens: [Token]) {
-    iter = .init(tokens)
+  init(_ iter: TokenIterator) {
+    self.iter = iter
   }
 
   func walk() -> Node? {
