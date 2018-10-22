@@ -1,11 +1,7 @@
 import Foundation
 
 extension String {
-  var iterator: StringIterator {
-    return StringIterator(self)
-  }
-
-  subscript (i: Int) -> String {
+  subscript(i: Int) -> String {
     return String(self[index(startIndex, offsetBy: i)])
   }
 
