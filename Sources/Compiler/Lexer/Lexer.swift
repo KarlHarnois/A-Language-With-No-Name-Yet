@@ -1,8 +1,7 @@
 struct Lexer {
   func tokenize(_ source: String) -> [Token] {
     var tokens: [Token] = []
-    let iterator = source.iterator
-    let consumer = LexemeConsumer(iterator: iterator)
+    let consumer = LexemeConsumer(iterator: source.iterator)
 
     while let token = consumeToken(consumer) {
       tokens.append(token)
