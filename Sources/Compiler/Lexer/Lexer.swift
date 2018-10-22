@@ -4,10 +4,7 @@ struct Lexer {
     let iterator = source.iterator
     let consumer = LexemeConsumer(iterator: iterator)
 
-    while !iterator.isDone {
-      guard let token = consumeToken(consumer) else {
-        fatalError("Unidentified character: \(iterator.current).")
-      }
+    while let token = consumeToken(consumer) {
       tokens.append(token)
     }
 
