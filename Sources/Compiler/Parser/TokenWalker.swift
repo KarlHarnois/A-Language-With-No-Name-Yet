@@ -40,12 +40,15 @@ final class TokenWalker {
 
   private func createMessage() -> Node {
     let msg = UnaryMessageDeclaration(selector: createSelector())
+
     while !iter.isDone {
-      guard iter.current != .label("msg") else { break }
+      guard iter.current != .label("msg"),
+            iter.current != .label("class") else { break }
       if let node = walk() {
         msg.add(node)
       }
     }
+
     return msg
   }
 

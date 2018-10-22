@@ -89,5 +89,29 @@ class ParserTests: XCTestCase {
       ])
     ])
   }
-}
 
+  func testSubsequentClassDeclarations() {
+    let tokens = lexer.tokenize("""
+    class Dog =>
+      msg get_name =>
+        "Tigo"
+
+    class Cat =>
+      msg get_name =>
+        "Chichi"
+    """)
+
+    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+      ClassDeclaration(name: "Dog", [
+        UnaryMessageDeclaration(selector: "get_name", [
+          StringLiteral("Tigo")
+        ])
+      ]),
+      ClassDeclaration(name: "Cat", [
+        UnaryMessageDeclaration(selector: "get_name", [
+          StringLiteral("Chichi")
+        ])
+      ])
+    ])
+  }
+}
