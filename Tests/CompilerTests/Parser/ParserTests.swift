@@ -3,19 +3,21 @@ import Nimble
 @testable import Compiler
 
 class ParserTests: XCTestCase {
-  var subject: Parser!
-  let lexer = Lexer()
+  func parse(_ src: String) -> Node? {
+    let tokens = Lexer().tokenize(src)
+    return parse(tokens)
+  }
 
-  override func setUp() {
-    subject = Parser()
+  func parse(_ tokens: [Token]) -> Node? {
+    return Parser().parse(tokens)
   }
 
   func testProgramDeclaration() {
-    expect(self.subject.parse([])) == ProgramDeclaration()
+    expect(self.parse([])) == ProgramDeclaration()
   }
 
   func testNumberLiteral() {
-    expect(self.subject.parse([.number("3")])) == ProgramDeclaration([
+    expect(self.parse([.number("3")])) == ProgramDeclaration([
       NumberLiteral("3")
     ])
   }
@@ -24,23 +26,23 @@ class ParserTests: XCTestCase {
     let tokens: [Token] = [
       .quote, .label("hello"), .space(1), .label("world"), .quote
     ]
-    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+    expect(self.parse(tokens)) == ProgramDeclaration([
       StringLiteral("hello world")
     ])
   }
 
   func testUnaryMessageDeclaration() {
-    let tokens = lexer.tokenize("msg get_age => 5")
-
-    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+    let actual = parse("msg get_age => 5")
+    let expected = ProgramDeclaration([
       UnaryMessageDeclaration(selector: "get_age", [
         NumberLiteral("5")
       ])
     ])
+    expect(actual) == expected
   }
 
   func testMultipleUnaryMessageDeclarations() {
-    let tokens = lexer.tokenize("""
+    let actual = parse("""
     msg get_age =>
       11
 
@@ -48,7 +50,7 @@ class ParserTests: XCTestCase {
       "Jean"
     """)
 
-    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+    let expected = ProgramDeclaration([
       UnaryMessageDeclaration(selector: "get_age", [
         NumberLiteral("11")
       ]),
@@ -56,20 +58,21 @@ class ParserTests: XCTestCase {
         StringLiteral("Jean")
       ])
     ])
+
+    expect(actual) == expected
   }
 
   func testBinaryMessageDeclaration() {}
   func testKeywordMessageDeclaration() {}
 
   func testEmptyClassDeclaration() {
-    let tokens = lexer.tokenize("class Iterator =>")
-    expect(self.subject.parse(tokens)) == ProgramDeclaration([
-      ClassDeclaration(name: "Iterator")
-    ])
+    let actual = self.parse("class Iterator =>")
+    let expected = ProgramDeclaration([ClassDeclaration(name: "Iterator")])
+    expect(actual) == expected
   }
 
   func testClassDeclarationWithMessages() {
-    let tokens = lexer.tokenize("""
+    let actual = parse("""
     class Dog =>
       msg bark =>
         "woof"
@@ -78,7 +81,7 @@ class ParserTests: XCTestCase {
         "Tigo"
     """)
 
-    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+    let expected = ProgramDeclaration([
       ClassDeclaration(name: "Dog", [
         UnaryMessageDeclaration(selector: "bark", [
           StringLiteral("woof")
@@ -88,10 +91,12 @@ class ParserTests: XCTestCase {
         ])
       ])
     ])
+
+    expect(actual) == expected
   }
 
   func testSubsequentClassDeclarations() {
-    let tokens = lexer.tokenize("""
+    let actual = parse("""
     class Dog =>
       msg get_name =>
         "Tigo"
@@ -101,7 +106,7 @@ class ParserTests: XCTestCase {
         "Chichi"
     """)
 
-    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+    let expected = ProgramDeclaration([
       ClassDeclaration(name: "Dog", [
         UnaryMessageDeclaration(selector: "get_name", [
           StringLiteral("Tigo")
@@ -113,5 +118,7 @@ class ParserTests: XCTestCase {
         ])
       ])
     ])
+
+    expect(actual) == expected
   }
 }
