@@ -16,8 +16,16 @@ final class TokenWalker {
       return createString()
     case .label("msg"):
       return createMessage()
+    case .label("class"):
+      return createClass()
     default:
       return nil
+    }
+  }
+
+  private func advance(to token: Token) {
+    while let t = iter.next() {
+      if t == token { break }
     }
   }
 
@@ -39,6 +47,38 @@ final class TokenWalker {
       }
     }
     return msg
+  }
+
+  private func createClass() -> Node? {
+    guard let name = createClassName() else {
+      return nil
+    }
+    let classNode = ClassDeclaration(name: name)
+
+    while !iter.isDone {
+      guard iter.current != .label("class") else { break }
+      if let node = walk() {
+        classNode.add(node)
+      }
+    }
+
+    return classNode
+  }
+
+  private func createClassName() -> String? {
+    var name: String?
+
+    while let token = iter.next() {
+      if case .space = token { continue }
+      if let name = name {
+        advance(to: .operator("=>"))
+        break
+      } else if case .label(let value) = token {
+        name = value
+      }
+    }
+
+    return name
   }
 
   private func createSelector() -> String {

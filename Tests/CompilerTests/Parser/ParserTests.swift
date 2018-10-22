@@ -60,5 +60,12 @@ class ParserTests: XCTestCase {
 
   func testBinaryMessageDeclaration() {}
   func testKeywordMessageDeclaration() {}
+
+  func testEmptyClassDeclaration() {
+    let tokens = lexer.tokenize("class Iterator =>")
+    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+      ClassDeclaration(name: "Iterator")
+    ])
+  }
 }
 
