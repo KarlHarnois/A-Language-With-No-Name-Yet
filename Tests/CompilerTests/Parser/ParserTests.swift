@@ -67,5 +67,27 @@ class ParserTests: XCTestCase {
       ClassDeclaration(name: "Iterator")
     ])
   }
+
+  func testClassDeclarationWithMessages() {
+    let tokens = lexer.tokenize("""
+    class Dog =>
+      msg bark =>
+        "woof"
+
+      msg get_name =>
+        "Tigo"
+    """)
+
+    expect(self.subject.parse(tokens)) == ProgramDeclaration([
+      ClassDeclaration(name: "Dog", [
+        UnaryMessageDeclaration(selector: "bark", [
+          StringLiteral("woof")
+        ]),
+        UnaryMessageDeclaration(selector: "get_name", [
+          StringLiteral("Tigo")
+        ])
+      ])
+    ])
+  }
 }
 

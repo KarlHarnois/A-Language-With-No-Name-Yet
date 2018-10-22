@@ -69,8 +69,7 @@ final class TokenWalker {
     var name: String?
 
     while let token = iter.next() {
-      if case .space = token { continue }
-      if let name = name {
+      if name != nil {
         advance(to: .operator("=>"))
         break
       } else if case .label(let value) = token {
