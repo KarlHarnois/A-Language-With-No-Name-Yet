@@ -3,9 +3,8 @@ final class MessageProducer: NodeProducer {
     let msg = UnaryMessageDeclaration(selector: produceSelector())
 
     while hasNext {
-      guard let node = walk(until: hasExitedMessage) else {
-        break
-      }
+      if hasExitedMessage { break }
+      guard let node = walk() else { continue }
       msg.add(node)
     }
 
@@ -24,7 +23,7 @@ final class MessageProducer: NodeProducer {
     return selector
   }
 
-  private func hasExitedMessage(token: Token) -> Bool {
-    return token == .label("msg") || token == .label("class")
+  private var hasExitedMessage: Bool {
+    return current == .label("msg") || current == .label("class")
   }
 }

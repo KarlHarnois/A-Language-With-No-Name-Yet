@@ -9,11 +9,6 @@ final class AstProducer: NodeProducerDelegate {
     self.iter = iter
   }
 
-  func walk(until stopCheck: (Token) -> Bool) -> Node? {
-    if stopCheck(iter.current) { return nil }
-    return walk()
-  }
-
   func walk() -> Node? {
     guard let token = iter.next() else {
       return nil

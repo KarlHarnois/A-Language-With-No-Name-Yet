@@ -1,6 +1,5 @@
 protocol NodeProducerDelegate: class {
   func walk() -> Node?
-  func walk(until stopChecker: (Token) -> Bool) -> Node?
 }
 
 class NodeProducer {
@@ -18,10 +17,6 @@ class NodeProducer {
 
   internal var current: Token? {
     return iterator.current
-  }
-
-  internal func walk(until stopChecker: (Token) -> Bool) -> Node? {
-    return delegate?.walk(until: stopChecker)
   }
 
   internal func walk() -> Node? {
