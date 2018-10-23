@@ -13,22 +13,21 @@ class ParserTests: XCTestCase {
   }
 
   func testProgramDeclaration() {
-    expect(self.parse([])) == ProgramDeclaration()
+    expect(self.parse([]))
+      .to(equal(ProgramDeclaration()))
   }
 
   func testNumberLiteral() {
-    expect(self.parse([.number("3")])) == ProgramDeclaration([
-      NumberLiteral("3")
-    ])
+    expect(self.parse([.number("3")]))
+      .to(equal(ProgramDeclaration([NumberLiteral("3")])))
   }
 
   func testStringLiteral() {
-    let tokens: [Token] = [
+    let actual = parse([
       .quote, .label("hello"), .space(1), .label("world"), .quote
-    ]
-    expect(self.parse(tokens)) == ProgramDeclaration([
-      StringLiteral("hello world")
     ])
+    let expected = ProgramDeclaration([StringLiteral("hello world")])
+    expect(actual).to(equal(expected))
   }
 
   func testUnaryMessageDeclaration() {
@@ -38,7 +37,7 @@ class ParserTests: XCTestCase {
         NumberLiteral("5")
       ])
     ])
-    expect(actual) == expected
+    expect(actual).to(equal(expected))
   }
 
   func testMultipleUnaryMessageDeclarations() {
@@ -59,7 +58,7 @@ class ParserTests: XCTestCase {
       ])
     ])
 
-    expect(actual) == expected
+    expect(actual).to(equal(expected))
   }
 
   func testBinaryMessageDeclaration() {}
@@ -68,7 +67,7 @@ class ParserTests: XCTestCase {
   func testEmptyClassDeclaration() {
     let actual = self.parse("class Iterator =>")
     let expected = ProgramDeclaration([ClassDeclaration(name: "Iterator")])
-    expect(actual) == expected
+    expect(actual).to(equal(expected))
   }
 
   func testClassDeclarationWithMessages() {
@@ -92,7 +91,7 @@ class ParserTests: XCTestCase {
       ])
     ])
 
-    expect(actual) == expected
+    expect(actual).to(equal(expected))
   }
 
   func testSubsequentClassDeclarations() {
@@ -119,6 +118,6 @@ class ParserTests: XCTestCase {
       ])
     ])
 
-    expect(actual) == expected
+    expect(actual).to(equal(expected))
   }
 }
