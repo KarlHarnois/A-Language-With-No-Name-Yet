@@ -1,4 +1,4 @@
-final class TokenWalker: NodeProducerDelegate {
+final class AstProducer: NodeProducerDelegate {
   private let iter: Iterator<[Token]>
 
   private lazy var string = StringProducer(iterator: iter, delegate: self)

@@ -1,9 +1,9 @@
 struct Parser {
   func parse(_ tokens: [Token]) -> Node {
     let program = ProgramDeclaration()
-    let walker = TokenWalker(tokens.iterator)
+    let producer = AstProducer(tokens.iterator)
 
-    while let node = walker.walk() {
+    while let node = producer.walk() {
       program.add(node)
     }
 
