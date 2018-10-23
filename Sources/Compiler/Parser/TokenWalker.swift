@@ -1,6 +1,10 @@
 final class TokenWalker: NodeProducerDelegate {
   private let iter: Iterator<[Token]>
 
+  private lazy var string = StringProducer(iterator: iter, delegate: self)
+  private lazy var message = MessageProducer(iterator: iter, delegate: self)
+  private lazy var `class` = ClassProducer(iterator: iter, delegate: self)
+
   init(_ iter: Iterator<[Token]>) {
     self.iter = iter
   }
@@ -10,16 +14,11 @@ final class TokenWalker: NodeProducerDelegate {
       return nil
     }
     switch token {
-    case .number(let value):
-      return NumberLiteral(value)
-    case .quote:
-      return StringProducer(iterator: iter, delegate: self).produce()
-    case .label("msg"):
-      return MessageProducer(iterator: iter, delegate: self).produce()
-    case .label("class"):
-      return ClassProducer(iterator: iter, delegate: self).produce()
-    default:
-      return nil
+    case .number(let value): return NumberLiteral(value)
+    case .quote:             return string.produce()
+    case .label("msg"):      return message.produce()
+    case .label("class"):    return `class`.produce()
+    default:                 return nil
     }
   }
 }
