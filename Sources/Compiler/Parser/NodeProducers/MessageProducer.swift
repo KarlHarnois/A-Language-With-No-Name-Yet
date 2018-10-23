@@ -2,11 +2,11 @@ final class MessageProducer: NodeProducer {
   override func produce() -> Node? {
     let msg = UnaryMessageDeclaration(selector: produceSelector())
 
-    while !isDoneIterating {
-      guard current != .label("msg"), current != .label("class") else { break }
-      if let node = walk() {
-        msg.add(node)
+    while hasNext {
+      guard let node = walk(until: hasExitedMessage) else {
+        break
       }
+      msg.add(node)
     }
 
     return msg
@@ -22,5 +22,9 @@ final class MessageProducer: NodeProducer {
     }
 
     return selector
+  }
+
+  private func hasExitedMessage(token: Token) -> Bool {
+    return token == .label("msg") || token == .label("class")
   }
 }

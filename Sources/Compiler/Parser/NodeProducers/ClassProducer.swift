@@ -5,8 +5,8 @@ final class ClassProducer: NodeProducer {
     }
     let classNode = ClassDeclaration(name: name)
 
-    while !isDoneIterating {
-      guard current != .label("class") else { break }
+    while hasNext {
+      guard !hasReachedNewClass else { break }
       guard let node = walk() else { continue }
       classNode.add(node)
     }
@@ -20,5 +20,9 @@ final class ClassProducer: NodeProducer {
       return name
     }
     return nil
+  }
+
+  private var hasReachedNewClass: Bool {
+    return current == .label("class")
   }
 }

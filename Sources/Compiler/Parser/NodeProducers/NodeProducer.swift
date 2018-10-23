@@ -1,5 +1,6 @@
 protocol NodeProducerDelegate: class {
   func walk() -> Node?
+  func walk(until stopChecker: (Token) -> Bool) -> Node?
 }
 
 class NodeProducer {
@@ -19,12 +20,16 @@ class NodeProducer {
     return iterator.current
   }
 
-  internal var isDoneIterating: Bool {
-    return iterator.isDone
+  internal func walk(until stopChecker: (Token) -> Bool) -> Node? {
+    return delegate?.walk(until: stopChecker)
   }
 
   internal func walk() -> Node? {
     return delegate?.walk()
+  }
+
+  internal var hasNext: Bool {
+    return !iterator.isDone
   }
 
   internal func next() -> Token? {
