@@ -13,4 +13,11 @@ final class IteratorTests: XCTestCase {
 
     expect(result) == ["H", "e", "l", "l", "o"]
   }
+
+  func testTrimWhitespaces() {
+    let tokens: [Token] = [.space(2), .newline, .number("3")]
+    let iter = tokens.iterator
+    iter.trimWhitespaces()
+    expect(iter.next()) == .number("3")
+  }
 }

@@ -1,4 +1,5 @@
 enum Token {
+
   case space(Int)
   case number(String)
   case newline
@@ -11,6 +12,15 @@ enum Token {
   case colon
   case label(String)
   case quote
+
+  var isWhitespace: Bool {
+    switch self {
+    case .space, .newline:
+      return true
+    default:
+      return false
+    }
+  }
 
   var lexeme: String {
     switch self {

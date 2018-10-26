@@ -42,4 +42,9 @@ class TokenTests: XCTestCase {
   func testSpaceLexeme() {
     expect(Token.space(4).lexeme) == "    "
   }
+
+  func testWhitespace() {
+    let tokens: [Token] = [.space(2), .newline, .number("2")]
+    expect(tokens.map { $0.isWhitespace }) == [true, true, false]
+  }
 }

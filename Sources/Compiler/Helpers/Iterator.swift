@@ -46,3 +46,13 @@ final class Iterator<A: Iterable> {
     return current
   }
 }
+
+extension Iterator where A.Value == Token {
+  func trimWhitespaces() {
+    if isDone { return }
+
+    while current.isWhitespace {
+      next()
+    }
+  }
+}

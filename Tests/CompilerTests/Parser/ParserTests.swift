@@ -2,7 +2,7 @@ import XCTest
 import Nimble
 @testable import Compiler
 
-class ParserTests: XCTestCase {
+final class ParserTests: XCTestCase {
   func parse(_ src: String) -> Node? {
     let tokens = Lexer().tokenize(src)
     return parse(tokens)
@@ -119,5 +119,12 @@ class ParserTests: XCTestCase {
     ])
 
     expect(actual).to(equal(expected))
+  }
+
+  func testProgramStartingWithSpaces() {
+    let expected = ProgramDeclaration([
+      ClassDeclaration(name: "Dog")
+    ])
+    expect(self.parse("    class Dog =>")).to(equal(expected))
   }
 }

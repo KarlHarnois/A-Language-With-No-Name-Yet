@@ -5,8 +5,9 @@ final class AstProducer: NodeProducerDelegate {
   private lazy var message = MessageProducer(iterator: iter, delegate: self)
   private lazy var `class` = ClassProducer(iterator: iter, delegate: self)
 
-  init(_ iter: Iterator<[Token]>) {
-    self.iter = iter
+  init(_ tokens: [Token]) {
+    self.iter = Iterator(iterable: tokens)
+    iter.trimWhitespaces()
   }
 
   func walk() -> Node? {
