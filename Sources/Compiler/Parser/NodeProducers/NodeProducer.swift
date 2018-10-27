@@ -3,6 +3,8 @@ protocol NodeProducerDelegate: class {
 }
 
 class NodeProducer {
+  typealias Options = [String: Any]
+
   private let iterator: Iterator<[Token]>
   private weak var delegate: NodeProducerDelegate?
 
@@ -11,7 +13,7 @@ class NodeProducer {
     self.delegate = delegate
   }
 
-  func produce() -> Node? {
+  func produce(_ opt: Options = [:]) -> Node? {
     return nil
   }
 

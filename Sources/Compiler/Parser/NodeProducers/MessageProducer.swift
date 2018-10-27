@@ -1,5 +1,5 @@
 final class MessageProducer: NodeProducer {
-  override func produce() -> Node? {
+  override func produce(_ opt: Options = [:]) -> Node? {
     let msg = UnaryMessageDeclaration(selector: produceSelector())
 
     while hasNext {

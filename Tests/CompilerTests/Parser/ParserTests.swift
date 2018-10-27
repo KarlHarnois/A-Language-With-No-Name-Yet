@@ -127,4 +127,26 @@ final class ParserTests: XCTestCase {
     ])
     expect(self.parse("    class Dog =>")).to(equal(expected))
   }
+
+  func testVariable() {
+    let expected = ProgramDeclaration([
+      InstanceVariable("self")
+    ])
+    expect(self.parse("self")).to(equal(expected))
+  }
+
+  func testVariableInMessageDeclaration() {
+    let actual = parse("""
+    msg get_animal =>
+      self
+    """)
+
+    let expected = ProgramDeclaration([
+      UnaryMessageDeclaration(selector: "get_animal", [
+        InstanceVariable("self")
+      ])
+    ])
+
+    expect(actual).to(equal(expected))
+  }
 }

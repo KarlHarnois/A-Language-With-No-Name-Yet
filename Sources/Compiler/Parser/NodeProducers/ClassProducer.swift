@@ -1,5 +1,5 @@
 final class ClassProducer: NodeProducer {
-  override func produce() -> Node? {
+  override func produce(_ opt: Options = [:]) -> Node? {
     guard let name = produceClassName() else {
       return nil
     }

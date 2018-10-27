@@ -1,5 +1,5 @@
 final class StringProducer: NodeProducer {
-  override func produce() -> Node? {
+  override func produce(_ opt: Options = [:]) -> Node? {
     var str = ""
 
     while let token = next() {
