@@ -1,5 +1,4 @@
 enum Token {
-
   case space(Int)
   case number(String)
   case newline
