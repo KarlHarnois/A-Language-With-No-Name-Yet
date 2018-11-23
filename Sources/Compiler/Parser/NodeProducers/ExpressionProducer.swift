@@ -25,11 +25,20 @@ final class ExpressionProducer: NodeProducer {
   }
 
   private func parseMessages(_ tokens:  [Token], rootVar: Node) -> Node? {
-    switch tokens[0] {
-    case .label(let selector):
-      return SendExpression(selector: selector, receiver: rootVar, params: [])
-    default:
-      return nil
+    var node: Node?
+
+    tokens.forEach { token in
+      guard case .label(let selector) = token else {
+        return
+      }
+      if let receiver = node {
+        let newNode = SendExpression(selector: selector, receiver: receiver, params: [])
+        node = newNode
+      } else {
+        node = SendExpression(selector: selector, receiver: rootVar, params: [])
+      }
     }
+
+    return node
   }
 }

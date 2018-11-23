@@ -154,10 +154,29 @@ final class ParserTests: XCTestCase {
     let expected = ProgramDeclaration([
       SendExpression(
         selector: "increment",
-        receiver: InstanceVariable("self"),
+        receiver: InstanceVariable("number"),
         params: []
       )
     ])
-    expect(self.parse("self increment")).to(equal(expected))
+    expect(self.parse("number increment")).to(equal(expected))
+  }
+
+  func testSendExpressionChaining() {
+    let expected = ProgramDeclaration([
+      SendExpression(
+        selector: "to_string",
+        receiver: SendExpression(
+          selector: "to_int",
+          receiver: SendExpression(
+            selector: "add_ten",
+            receiver: InstanceVariable("number"),
+            params: []
+          ),
+          params: []
+        ),
+        params: []
+      )
+    ])
+    expect(self.parse("number add_ten to_int to_string")).to(equal(expected))
   }
 }
