@@ -3,13 +3,21 @@ final class ExpressionProducer: NodeProducer {
     guard let variableName = opt["label"] as? String else {
       return nil
     }
-    let variable = Variable(variableName)
+    let variable = referenceNode(name: variableName)
     let tokens = produceMessageTokens()
 
     if tokens.isEmpty {
       return variable
     } else {
       return parseMessages(tokens, rootVar: variable)
+    }
+  }
+
+  private func referenceNode(name: String) -> Node {
+    if name == "self" {
+      return SelfReference()
+    } else {
+      return Variable(name)
     }
   }
 

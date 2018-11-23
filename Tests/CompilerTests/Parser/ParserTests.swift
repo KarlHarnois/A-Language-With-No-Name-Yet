@@ -179,4 +179,8 @@ final class ParserTests: XCTestCase {
     ])
     expect(self.parse("number add_ten to_int to_string")).to(equal(expected))
   }
+
+  func testSelf() {
+    expect(self.parse("self")).to(equal(ProgramDeclaration([SelfReference()])))
+  }
 }
