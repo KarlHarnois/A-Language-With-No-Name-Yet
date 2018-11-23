@@ -183,4 +183,34 @@ final class ParserTests: XCTestCase {
   func testSelf() {
     expect(self.parse("self")).to(equal(ProgramDeclaration([SelfReference()])))
   }
+
+  func testClassWithExpressions() {
+    let actual = self.parse("""
+    class HumanRepo =>
+      msg first =>
+        self humans first to_string
+    """)
+
+    let expected = ProgramDeclaration([
+      ClassDeclaration(name: "HumanRepo", [
+        UnaryMessageDeclaration(selector: "first", [
+          SendExpression(
+            selector: "to_string",
+            receiver: SendExpression(
+              selector: "first",
+              receiver: SendExpression(
+                selector: "humans",
+                receiver: SelfReference(),
+                params: []
+              ),
+              params: []
+            ),
+            params: []
+          )
+        ])
+      ])
+    ])
+
+    expect(actual).to(equal(expected))
+  }
 }
