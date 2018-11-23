@@ -130,20 +130,20 @@ final class ParserTests: XCTestCase {
 
   func testVariable() {
     let expected = ProgramDeclaration([
-      InstanceVariable("self")
+      Variable("animal")
     ])
-    expect(self.parse("self")).to(equal(expected))
+    expect(self.parse("animal")).to(equal(expected))
   }
 
   func testVariableInMessageDeclaration() {
     let actual = parse("""
     msg get_animal =>
-      self
+      animal
     """)
 
     let expected = ProgramDeclaration([
       UnaryMessageDeclaration(selector: "get_animal", [
-        InstanceVariable("self")
+        Variable("animal")
       ])
     ])
 
@@ -154,7 +154,7 @@ final class ParserTests: XCTestCase {
     let expected = ProgramDeclaration([
       SendExpression(
         selector: "increment",
-        receiver: InstanceVariable("number"),
+        receiver: Variable("number"),
         params: []
       )
     ])
@@ -169,7 +169,7 @@ final class ParserTests: XCTestCase {
           selector: "to_int",
           receiver: SendExpression(
             selector: "add_ten",
-            receiver: InstanceVariable("number"),
+            receiver: Variable("number"),
             params: []
           ),
           params: []

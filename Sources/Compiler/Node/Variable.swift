@@ -1,4 +1,4 @@
-final class InstanceVariable: Node {
+final class Variable: Node {
   let name: String
 
   init(_ name: String) {

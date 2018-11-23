@@ -1,10 +1,9 @@
-
 final class ExpressionProducer: NodeProducer {
   override func produce(_ opt: Options = [:]) -> Node? {
     guard let variableName = opt["label"] as? String else {
       return nil
     }
-    let variable = InstanceVariable(variableName)
+    let variable = Variable(variableName)
     let tokens = produceMessageTokens()
 
     if tokens.isEmpty {
