@@ -213,4 +213,12 @@ final class ParserTests: XCTestCase {
 
     expect(actual).to(equal(expected))
   }
+
+  func testPrintStatement() {
+    expect(self.parse("print name")).to(equal(ProgramDeclaration([
+      PrintStatement([
+        Variable("name")
+      ])
+    ])))
+  }
 }
