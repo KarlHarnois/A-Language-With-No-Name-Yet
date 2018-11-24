@@ -230,4 +230,67 @@ final class ParserTests: XCTestCase {
     ])
     expect(self.parse("number = 5")).to(equal(expected))
   }
+
+  func testStringAssignmentStatement() {
+    let actual = parse("""
+    dog_name = "Tigo"
+    """)
+
+    let expected = ProgramDeclaration([
+      AssignmentStatement(
+        variableName: "dog_name",
+        value: StringLiteral("Tigo")
+      )
+    ])
+
+    expect(actual).to(equal(expected))
+  }
+
+  func testExpressionAssignment() {
+    let expected = ProgramDeclaration([
+      AssignmentStatement(
+        variableName: "result",
+        value: SendExpression(
+          selector: "compute_result",
+          receiver: SelfReference(),
+          params: []
+        )
+      )
+    ])
+    expect(self.parse("result = self compute_result")).to(equal(expected))
+  }
+
+  func testAssignmentInContext() {
+    let actual = parse("""
+    class Iterator =>
+      msg next =>
+        elem = self current
+        self cursor increment
+        elem
+    """)
+
+    let expected = ProgramDeclaration([
+      ClassDeclaration(name: "Iterator", [
+        UnaryMessageDeclaration(selector: "next", [
+          AssignmentStatement(variableName: "elem", value: SendExpression(
+            selector: "current",
+            receiver: SelfReference(),
+            params: []
+          )),
+          SendExpression(
+            selector: "increment",
+            receiver: SendExpression(
+              selector: "cursor",
+              receiver: SelfReference(),
+              params: []
+            ),
+            params: []
+          ),
+          Variable("elem")
+        ])
+      ])
+    ])
+
+    expect(actual).to(equal(expected))
+  }
 }
