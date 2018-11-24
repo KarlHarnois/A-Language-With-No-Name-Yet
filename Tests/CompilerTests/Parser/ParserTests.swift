@@ -221,4 +221,13 @@ final class ParserTests: XCTestCase {
       ])
     ])))
   }
+
+  func testNumberAssignmentStatement() {
+    let expected = ProgramDeclaration([
+      AssignmentStatement(
+        variableName: "number",
+        value: NumberLiteral("5"))
+    ])
+    expect(self.parse("number = 5")).to(equal(expected))
+  }
 }

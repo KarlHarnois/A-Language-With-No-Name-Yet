@@ -45,6 +45,14 @@ final class Iterator<A: Iterable> {
     defer { cursor += 1 }
     return current
   }
+
+  func element(steps: Int) -> A.Value? {
+    let index = cursor + steps
+    guard index < iterable.count else {
+      return nil
+    }
+    return iterable.element(at: index)
+  }
 }
 
 extension Iterator where A.Value == Token {

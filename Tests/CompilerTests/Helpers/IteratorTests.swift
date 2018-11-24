@@ -20,4 +20,11 @@ final class IteratorTests: XCTestCase {
     iter.trimWhitespaces()
     expect(iter.next()) == .number("3")
   }
+
+  func testElementSteps() {
+    let tokens: [Token] = [.space(3), .number("4"), .newline]
+    let iter = tokens.iterator
+    expect(iter.element(steps: 2)) == .newline
+    expect(iter.element(steps: 10)).to(beNil())
+  }
 }
