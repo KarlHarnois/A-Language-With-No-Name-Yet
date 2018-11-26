@@ -3,36 +3,36 @@ import Nimble
 @testable import Compiler
 
 final class ParserTests: XCTestCase {
-  func parse(_ src: String) -> Node? {
+  func parse(_ src: String, fileName: String = "Object") -> Node? {
     let tokens = Lexer().tokenize(src)
-    return parse(tokens)
+    return parse(tokens, fileName: fileName)
   }
 
-  func parse(_ tokens: [Token]) -> Node? {
-    return Parser().parse(tokens)
+  func parse(_ tokens: [Token], fileName: String = "Object") -> Node? {
+    return Parser().parse(fileName: fileName, tokens: tokens)
   }
 
-  func testProgramDeclaration() {
-    expect(self.parse([]))
-      .to(equal(ProgramDeclaration()))
+  func testFileDeclaration() {
+    expect(self.parse([], fileName: "Iterator"))
+      .to(equal(FileDeclaration(name: "Iterator")))
   }
 
   func testNumberLiteral() {
     expect(self.parse([.number("3")]))
-      .to(equal(ProgramDeclaration([NumberLiteral("3")])))
+      .to(equal(FileDeclaration(name: "Object", [NumberLiteral("3")])))
   }
 
   func testStringLiteral() {
     let actual = parse([
       .quote, .label("hello"), .space(1), .label("world"), .quote
     ])
-    let expected = ProgramDeclaration([StringLiteral("hello world")])
+    let expected = FileDeclaration(name: "Object", [StringLiteral("hello world")])
     expect(actual).to(equal(expected))
   }
 
   func testUnaryMessageDeclaration() {
     let actual = parse("msg get_age => 5")
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       UnaryMessageDeclaration(selector: "get_age", [
         NumberLiteral("5")
       ])
@@ -49,7 +49,7 @@ final class ParserTests: XCTestCase {
       "Jean"
     """)
 
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       UnaryMessageDeclaration(selector: "get_age", [
         NumberLiteral("11")
       ]),
@@ -66,7 +66,7 @@ final class ParserTests: XCTestCase {
 
   func testEmptyClassDeclaration() {
     let actual = self.parse("class Iterator =>")
-    let expected = ProgramDeclaration([ClassDeclaration(name: "Iterator")])
+    let expected = FileDeclaration(name: "Object", [ClassDeclaration(name: "Iterator")])
     expect(actual).to(equal(expected))
   }
 
@@ -80,7 +80,7 @@ final class ParserTests: XCTestCase {
         "Tigo"
     """)
 
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       ClassDeclaration(name: "Dog", [
         UnaryMessageDeclaration(selector: "bark", [
           StringLiteral("woof")
@@ -105,7 +105,7 @@ final class ParserTests: XCTestCase {
         "Chichi"
     """)
 
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       ClassDeclaration(name: "Dog", [
         UnaryMessageDeclaration(selector: "get_name", [
           StringLiteral("Tigo")
@@ -121,15 +121,15 @@ final class ParserTests: XCTestCase {
     expect(actual).to(equal(expected))
   }
 
-  func testProgramStartingWithSpaces() {
-    let expected = ProgramDeclaration([
+  func testFileStartingWithSpaces() {
+    let expected = FileDeclaration(name: "Object", [
       ClassDeclaration(name: "Dog")
     ])
     expect(self.parse("    class Dog =>")).to(equal(expected))
   }
 
   func testVariable() {
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       Variable("animal")
     ])
     expect(self.parse("animal")).to(equal(expected))
@@ -141,7 +141,7 @@ final class ParserTests: XCTestCase {
       animal
     """)
 
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       UnaryMessageDeclaration(selector: "get_animal", [
         Variable("animal")
       ])
@@ -151,7 +151,7 @@ final class ParserTests: XCTestCase {
   }
 
   func testSendExpression() {
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       SendExpression(
         selector: "increment",
         receiver: Variable("number"),
@@ -162,7 +162,7 @@ final class ParserTests: XCTestCase {
   }
 
   func testSendExpressionChaining() {
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       SendExpression(
         selector: "to_string",
         receiver: SendExpression(
@@ -181,7 +181,7 @@ final class ParserTests: XCTestCase {
   }
 
   func testSelf() {
-    expect(self.parse("self")).to(equal(ProgramDeclaration([SelfReference()])))
+    expect(self.parse("self")).to(equal(FileDeclaration(name: "Object", [SelfReference()])))
   }
 
   func testClassWithExpressions() {
@@ -191,7 +191,7 @@ final class ParserTests: XCTestCase {
         self humans first to_string
     """)
 
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       ClassDeclaration(name: "HumanRepo", [
         UnaryMessageDeclaration(selector: "first", [
           SendExpression(
@@ -215,7 +215,7 @@ final class ParserTests: XCTestCase {
   }
 
   func testPrintStatement() {
-    expect(self.parse("print name")).to(equal(ProgramDeclaration([
+    expect(self.parse("print name")).to(equal(FileDeclaration(name: "Object", [
       PrintStatement([
         Variable("name")
       ])
@@ -223,7 +223,7 @@ final class ParserTests: XCTestCase {
   }
 
   func testNumberAssignmentStatement() {
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       AssignmentStatement(
         variableName: "number",
         value: NumberLiteral("5"))
@@ -236,7 +236,7 @@ final class ParserTests: XCTestCase {
     dog_name = "Tigo"
     """)
 
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       AssignmentStatement(
         variableName: "dog_name",
         value: StringLiteral("Tigo")
@@ -247,7 +247,7 @@ final class ParserTests: XCTestCase {
   }
 
   func testExpressionAssignment() {
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       AssignmentStatement(
         variableName: "result",
         value: SendExpression(
@@ -269,7 +269,7 @@ final class ParserTests: XCTestCase {
         elem
     """)
 
-    let expected = ProgramDeclaration([
+    let expected = FileDeclaration(name: "Object", [
       ClassDeclaration(name: "Iterator", [
         UnaryMessageDeclaration(selector: "next", [
           AssignmentStatement(variableName: "elem", value: SendExpression(

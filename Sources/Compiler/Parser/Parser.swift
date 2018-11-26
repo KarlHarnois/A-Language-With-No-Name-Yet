@@ -1,12 +1,12 @@
 struct Parser {
-  func parse(_ tokens: [Token]) -> Node {
-    let program = ProgramDeclaration()
+  func parse(fileName: String, tokens: [Token]) -> Node {
+    let file = FileDeclaration(name: fileName)
     let producer = AstProducer(tokens)
 
     while let node = producer.walk() {
-      program.add(node)
+      file.add(node)
     }
 
-    return program
+    return file
   }
 }
