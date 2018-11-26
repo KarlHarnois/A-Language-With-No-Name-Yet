@@ -17,19 +17,22 @@ struct Directory {
   }
 
   func files(ext: String) throws -> [File] {
-    let manager = FileManager.default
-    let enumerator = manager.enumerator(atPath: path)
-
     var files: [File] = []
 
-    try enumerator?.allObjects.forEach { elem in
-      guard let elem = elem as? String, elem.hasSuffix(ext) else { return }
-      let name = elem.components(separatedBy: ".")[0]
-      let content = try String(contentsOfFile: path + "/" + elem)
-      let file = File(name: name, ext: ext, content: content)
+    try fileNames.forEach { name in
+      guard name.hasSuffix(ext) else { return }
+      let nameWithoutExtension = name.components(separatedBy: ".")[0]
+      let content = try String(contentsOfFile: path + "/" + name)
+      let file = File(name: nameWithoutExtension, ext: ext, content: content)
       files.append(file)
     }
 
     return files
+  }
+
+  private var fileNames: [String] {
+    let manager = FileManager.default
+    let enumerator = manager.enumerator(atPath: path)
+    return enumerator?.allObjects as? [String] ?? []
   }
 }
