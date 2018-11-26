@@ -3,11 +3,8 @@ import Foundation
 struct Directory {
   let path: String
 
-  private let pathURL: URL
-
   init(path: String) {
     self.path = path
-    self.pathURL = URL(fileURLWithPath: path)
   }
 
   init(relativePath: String) {
