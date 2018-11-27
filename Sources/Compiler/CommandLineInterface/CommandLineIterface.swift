@@ -10,11 +10,11 @@ public struct CommandLineInterface {
   }
 
   public func run() throws {
-    guard args.count > 0 && command != "help" else {
+    guard let command = command, command != "help" else {
       throw Error.custom("help command not implemented yet")
     }
     guard command == "build" else {
-      throw Error.invalidArguments(args)
+      throw Error.invalidCommand(command)
     }
   }
 

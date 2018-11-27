@@ -1,7 +1,7 @@
 import Foundation
 
 enum Error: LocalizedError {
-  case invalidArguments(_ arguments: [String])
+  case invalidCommand(_ command: String)
   case custom(_ message: String)
 
   public var errorDescription: String? {
@@ -10,8 +10,8 @@ enum Error: LocalizedError {
 
   private var message: String {
     switch self {
-    case .invalidArguments(let args):
-      return "invalid arguments: \(args)"
+    case .invalidCommand(let command):
+      return "invalid command \(command)"
     case .custom(let msg):
       return msg
     }

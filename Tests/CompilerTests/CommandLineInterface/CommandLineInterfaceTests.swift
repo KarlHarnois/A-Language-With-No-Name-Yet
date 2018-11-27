@@ -29,8 +29,8 @@ final class CommandLineInterfaceTests: XCTestCase {
     expect(self.error) == .custom("help command not implemented yet")
   }
 
-  func testInvalidArguments() {
+  func testInvalidCommand() {
     run("make coffee")
-    expect(self.error) == .invalidArguments(["make", "coffee"])
+    expect(self.error) == .invalidCommand("make")
   }
 }
