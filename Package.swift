@@ -9,6 +9,7 @@ let package = Package(
   ],
   targets: [
     .target(name: "Compiler", dependencies: []),
+    .target(name: "Executable", dependencies: ["Compiler"]),
     .testTarget(name: "CompilerTests", dependencies: ["Compiler", "Nimble"])
   ]
  )
