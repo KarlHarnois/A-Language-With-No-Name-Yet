@@ -21,10 +21,10 @@ enum Error: LocalizedError {
       return "unknown option \(option)"
 
     case .missingRequiredOption(let flag):
-      return "required option \(flag.rawValue) is missing"
+      return "required option \(flag.verbose) is missing"
 
     case .missingValue(let flag):
-      return "option --\(flag.verbose) requires a value; provide a value using '\(flag.verbose) <value>' or '\(flag.shorthand) <value>'"
+      return "option \(flag.verbose) requires a value; provide a value using '\(flag.verbose) <value>' or '\(flag.shorthand) <value>'"
 
     case let .invalidOption(flag, value):
       return "no \(flag.rawValue) named \(value)"
