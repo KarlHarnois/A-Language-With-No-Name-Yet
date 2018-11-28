@@ -2,11 +2,11 @@ struct BuildCommand: Command {
   static let options: [Flag] = [.target]
 
   let options: Options
+  let fileSystem: FileSystem
 
   func run() throws {
-    guard let target = option(.target) else {
-      throw Error.missingRequiredOption(.target)
-    }
+    let target = try requireOption(.target)
+
     guard target == "jvm" else {
       throw Error.invalidOption(.target, target)
     }

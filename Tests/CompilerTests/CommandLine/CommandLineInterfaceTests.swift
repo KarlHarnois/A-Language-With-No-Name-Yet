@@ -8,7 +8,7 @@ final class CommandLineInterfaceTests: XCTestCase {
   func run(_ args: String) {
     do {
       let args = ["CliName"] + args.split(separator: " ").map(String.init)
-      try CommandLineInterface(args: args).run()
+      try CommandLineInterface(args: args, fileSystem: InMemoryFileSystem()).run()
     } catch {
       self.error = error as? Compiler.Error
     }

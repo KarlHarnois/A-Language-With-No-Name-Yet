@@ -2,9 +2,11 @@ import Foundation
 
 public struct CommandLineInterface {
   private let args: [String]
+  private let fileSystem: FileSystem
 
-  public init(args: [String] = CommandLine.arguments) {
+  public init(args: [String] = CommandLine.arguments, fileSystem: FileSystem = DefaultFileSystem()) {
     self.args = Array(args.dropFirst())
+    self.fileSystem = fileSystem
   }
 
   public func run() throws {
@@ -20,12 +22,15 @@ public struct CommandLineInterface {
   }
 
   private func command(named name: String) throws -> Command {
+    let type = try commandType(name: name)
+    let options = try parseOptions(allowed: type.options)
+    return type.init(options: options, fileSystem: fileSystem)
+  }
+
+  private func commandType(name: String) throws -> Command.Type {
     switch name {
-    case "build":
-      let options = try parseOptions(allowed: BuildCommand.options)
-      return BuildCommand(options: options)
-    default:
-      throw Error.invalidCommand(name)
+    case "build": return BuildCommand.self
+    default:      throw Error.invalidCommand(name)
     }
   }
 
