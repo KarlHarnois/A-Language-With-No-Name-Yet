@@ -29,8 +29,8 @@ public struct CommandLineInterface {
     }
   }
 
-  private func parseOptions(allowed: [Flag]) throws -> [Flag: String] {
+  private func parseOptions(allowed: [Flag]) throws -> Options {
     let optionArguments = Array(args.dropFirst())
-    return try OptionParser(args: optionArguments).parse(allowed: allowed)
+    return try OptionParser(args: optionArguments, allowed: allowed).parse()
   }
 }

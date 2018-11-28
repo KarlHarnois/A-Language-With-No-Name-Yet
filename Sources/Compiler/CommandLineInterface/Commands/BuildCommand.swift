@@ -1,10 +1,10 @@
 struct BuildCommand: Command {
   static let options: [Flag] = [.target]
 
-  let options: [Flag: String]
+  let options: Options
 
   func run() throws {
-    guard let target = options[.target] else {
+    guard let target = option(.target) else {
       throw Error.missingRequiredOption(.target)
     }
     guard target == "jvm" else {

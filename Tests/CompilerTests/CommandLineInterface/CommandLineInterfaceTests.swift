@@ -34,7 +34,7 @@ final class CommandLineInterfaceTests: XCTestCase {
     expect(self.error) == .invalidCommand("make")
   }
 
-  func testMissingOption() {
+  func testMissingRequiredOption() {
     run("build")
     expect(self.error) == .missingRequiredOption(.target)
   }
@@ -52,5 +52,10 @@ final class CommandLineInterfaceTests: XCTestCase {
   func testUnknownOption() {
     run("build --toaster old")
     expect(self.error) == .unknownOption("--toaster")
+  }
+
+  func testMissingValueForOption() {
+    run("build --target")
+    expect(self.error) == .missingValue(.target)
   }
 }

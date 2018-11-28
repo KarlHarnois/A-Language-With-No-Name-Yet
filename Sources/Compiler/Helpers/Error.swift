@@ -1,10 +1,12 @@
 import Foundation
 
 enum Error: LocalizedError {
-  case invalidCommand(String)
-  case unknownOption(String), missingRequiredOption(Flag)
-  case invalidOption(Flag, String)
-  case custom(String)
+  case invalidCommand(String),
+       unknownOption(String),
+       missingRequiredOption(Flag),
+       missingValue(Flag),
+       invalidOption(Flag, String),
+       custom(String)
 
   public var errorDescription: String? {
     return "error: " + message
@@ -20,6 +22,9 @@ enum Error: LocalizedError {
 
     case .missingRequiredOption(let flag):
       return "required option \(flag.rawValue) is missing"
+
+    case .missingValue(let flag):
+      return "option --\(flag.verbose) requires a value; provide a value using '\(flag.verbose) <value>' or '\(flag.shorthand) <value>'"
 
     case let .invalidOption(flag, value):
       return "no \(flag.rawValue) named \(value)"
