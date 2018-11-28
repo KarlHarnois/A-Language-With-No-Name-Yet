@@ -1,9 +1,10 @@
 import Foundation
 
 enum Error: LocalizedError {
-  case invalidCommand(_ command: String)
-  case missingTarget, invalidTarget(_ target: String)
-  case custom(_ message: String)
+  case invalidCommand(String)
+  case unknownOption(String), missingRequiredOption(Flag)
+  case invalidOption(Flag, String)
+  case custom(String)
 
   public var errorDescription: String? {
     return "error: " + message
@@ -14,11 +15,14 @@ enum Error: LocalizedError {
     case .invalidCommand(let command):
       return "invalid command \(command)"
 
-    case .missingTarget:
-      return "missing build target, use --target <argument>"
+    case .unknownOption(let option):
+      return "unknown option \(option)"
 
-    case .invalidTarget(let target):
-      return "invalid target \(target)"
+    case .missingRequiredOption(let flag):
+      return "required option \(flag.rawValue) is missing"
+
+    case let .invalidOption(flag, value):
+      return "no \(flag.rawValue) named \(value)"
 
     case .custom(let msg):
       return msg

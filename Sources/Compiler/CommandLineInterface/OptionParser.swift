@@ -5,12 +5,12 @@ struct OptionParser {
     iterator = Iterator(iterable: args)
   }
 
-  func parse(allowed: [Flag] = Flag.allCases) throws -> [Flag: String] {
+  func parse(allowed: [Flag]) throws -> [Flag: String] {
     var options: [Flag: String] = [:]
 
     while let optionString = iterator.next() {
       guard let flag = allowed.first(where: { $0.match(optionString) }) else {
-        break
+        throw Error.unknownOption(optionString)
       }
       guard let option = iterator.next() else {
         break

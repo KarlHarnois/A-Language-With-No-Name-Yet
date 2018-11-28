@@ -11,9 +11,7 @@ public struct CommandLineInterface {
     guard let name = commandName, name != "help" else {
       throw Error.custom("help command not implemented yet")
     }
-    guard let command = try self.command(named: name) else {
-      throw Error.invalidCommand(name)
-    }
+    let command = try self.command(named: name)
     try command.run()
   }
 
@@ -21,13 +19,18 @@ public struct CommandLineInterface {
     return args.first?.lowercased()
   }
 
-  private func command(named name: String) throws -> Command? {
-    let optionArguments = Array(args.dropFirst())
-    let options = try OptionParser(args: optionArguments).parse()
-
+  private func command(named name: String) throws -> Command {
     switch name {
-    case "build": return BuildCommand(options: options)
-    default:      return nil
+    case "build":
+      let options = try parseOptions(allowed: BuildCommand.options)
+      return BuildCommand(options: options)
+    default:
+      throw Error.invalidCommand(name)
     }
+  }
+
+  private func parseOptions(allowed: [Flag]) throws -> [Flag: String] {
+    let optionArguments = Array(args.dropFirst())
+    return try OptionParser(args: optionArguments).parse(allowed: allowed)
   }
 }
