@@ -33,4 +33,19 @@ final class CommandLineInterfaceTests: XCTestCase {
     run("make coffee")
     expect(self.error) == .invalidCommand("make")
   }
+
+  func testMissingTarget() {
+    run("build")
+    expect(self.error) == .missingTarget
+  }
+
+  func testInvalidTarget() {
+    run("build --target js")
+    expect(self.error) == .invalidTarget("js")
+  }
+
+  func testShorthandFlag() {
+    run("build -t clr")
+    expect(self.error) == .invalidTarget("clr")
+  }
 }

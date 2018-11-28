@@ -4,21 +4,30 @@ public struct CommandLineInterface {
   private let args: [String]
 
   public init(args: [String] = CommandLine.arguments) {
-    var args = args
-    args.removeFirst()
-    self.args = args
+    self.args = Array(args.dropFirst())
   }
 
   public func run() throws {
-    guard let command = command, command != "help" else {
+    guard let name = commandName, name != "help" else {
       throw Error.custom("help command not implemented yet")
     }
-    guard command == "build" else {
-      throw Error.invalidCommand(command)
+    guard let command = try self.command(named: name) else {
+      throw Error.invalidCommand(name)
     }
+    try command.run()
   }
 
-  private var command: String? {
+  private var commandName: String? {
     return args.first?.lowercased()
+  }
+
+  private func command(named name: String) throws -> Command? {
+    let optionArguments = Array(args.dropFirst())
+    let options = try OptionParser(args: optionArguments).parse()
+
+    switch name {
+    case "build": return BuildCommand(options: options)
+    default:      return nil
+    }
   }
 }
