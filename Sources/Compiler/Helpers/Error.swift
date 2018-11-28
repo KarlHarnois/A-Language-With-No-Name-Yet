@@ -9,7 +9,7 @@ enum Error: LocalizedError {
        custom(String)
 
   public var errorDescription: String? {
-    return "error: " + message
+    return "error: ".style(.red, .bold) + message
   }
 
   private var message: String {
