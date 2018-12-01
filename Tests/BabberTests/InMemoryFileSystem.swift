@@ -1,18 +1,19 @@
 import BabberKit
 
 final class InMemoryFileSystem: FileSystem {
-  var files: [File] = []
+  private typealias Path = String
+  private var system: [Path: (dir: Directory, files: [File])] = [:]
 
-  var readDirectory: String?
-  var readExtension: String?
-
-  func readAll(ext: String, inDirectory dir: String) throws -> [File] {
-    readDirectory = dir
-    readExtension = ext
-    return files
+  func readAll(ext: String, from dir: Directory) throws -> [File] {
+    let files = system[dir.path]?.files ?? []
+    return files.filter { $0.ext == ext }
   }
 
-  func write(_ files: [File]) throws {
-    self.files = files
+  func write(_ files: [File], in dir: Directory) throws {
+    guard let content = system[dir.path] else {
+      system[dir.path] = (dir: dir, files: files)
+      return
+    }
+    system[dir.path] = (dir: dir, files: content.files + files)
   }
 }

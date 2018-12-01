@@ -1,5 +1,5 @@
 public struct File {
-  let name: String
-  let ext: String
-  let content: String
+  public let name: String
+  public let ext: String
+  public let content: String
 }
