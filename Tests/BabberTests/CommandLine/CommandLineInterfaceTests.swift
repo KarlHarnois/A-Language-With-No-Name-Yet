@@ -1,16 +1,16 @@
 import XCTest
 import Nimble
-@testable import Compiler
+@testable import BabberKit
 
 final class CommandLineInterfaceTests: XCTestCase {
-  var error: Compiler.Error?
+  var error: BabberKit.Error?
 
   func run(_ args: String) {
     do {
       let args = ["CliName"] + args.split(separator: " ").map(String.init)
       try CommandLineInterface(args: args, fileSystem: InMemoryFileSystem()).run()
     } catch {
-      self.error = error as? Compiler.Error
+      self.error = error as? BabberKit.Error
     }
   }
 

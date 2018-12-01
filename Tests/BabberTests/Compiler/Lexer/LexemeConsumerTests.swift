@@ -1,6 +1,6 @@
 import Nimble
 import XCTest
-@testable import Compiler
+@testable import BabberKit
 
 final class LexemeConsumerTests: XCTestCase {
   func testConsumeLexeme() {

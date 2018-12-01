@@ -1,6 +1,6 @@
 import XCTest
 import Nimble
-@testable import Compiler
+@testable import BabberKit
 
 class TokenTests: XCTestCase {
   func testEqualSpaces() {

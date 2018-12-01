@@ -8,8 +8,8 @@ let package = Package(
     .package(url: "https://github.com/Quick/Nimble.git", from: "7.3.1")
   ],
   targets: [
-    .target(name: "Compiler", dependencies: []),
-    .target(name: "Executable", dependencies: ["Compiler"]),
-    .testTarget(name: "CompilerTests", dependencies: ["Compiler", "Nimble"])
+    .target(name: "BabberKit", dependencies: []),
+    .target(name: "Babber", dependencies: ["BabberKit"]),
+    .testTarget(name: "BabberTests", dependencies: ["BabberKit", "Nimble"])
   ]
  )

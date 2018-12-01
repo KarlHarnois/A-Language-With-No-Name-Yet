@@ -1,5 +1,5 @@
 import Nimble
-@testable import Compiler
+@testable import BabberKit
 
 func equal(_ expected: Node) -> Predicate<Node> {
   return Predicate { actual throws -> PredicateResult in
