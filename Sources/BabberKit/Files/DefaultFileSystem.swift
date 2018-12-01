@@ -21,8 +21,11 @@ public struct DefaultFileSystem: FileSystem {
 
   public func write(_ files: [File], in dir: Directory) throws {
     try files.forEach { file in
-      let path = dir.urlPath(for: file)
-      try file.content.write(to: path, atomically: true, encoding: .utf8)
+      if !directoryExists(dir) {
+        try createDirectory(dir)
+      }
+      let filePath = dir.urlPath(for: file)
+      try file.content.write(to: filePath, atomically: true, encoding: .utf8)
     }
   }
 
@@ -34,5 +37,15 @@ public struct DefaultFileSystem: FileSystem {
   private func fileNames(atPath path: String) -> [String] {
     let enumerator = manager.enumerator(atPath: path)
     return enumerator?.allObjects as? [String] ?? []
+  }
+
+  private func directoryExists(_ dir: Directory) -> Bool {
+    return manager.fileExists(atPath: dir.path)
+  }
+
+  private func createDirectory(_ dir: Directory) throws {
+    try manager.createDirectory(atPath: dir.path,
+                                withIntermediateDirectories: true,
+                                attributes: nil)
   }
 }
