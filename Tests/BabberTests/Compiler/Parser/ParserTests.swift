@@ -1,6 +1,6 @@
 import XCTest
 import Nimble
-@testable import Compiler
+@testable import BabberKit
 
 final class ParserTests: XCTestCase {
   func parse(_ src: String, fileName: String = "Object") -> Node? {

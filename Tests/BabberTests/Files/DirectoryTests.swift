@@ -1,9 +1,9 @@
 import XCTest
 import Nimble
-@testable import Compiler
+@testable import BabberKit
 
 final class DirectoryTests: XCTestCase {
-  let fixturePath = "/Tests/CompilerTests/Files/Fixtures"
+  let fixturePath = "/Tests/BabberTests/Files/Fixtures"
 
   func testFilesFromRelativePath() {
     let dir = Directory(relativePath: fixturePath)

@@ -1,4 +1,4 @@
-import Compiler
+import BabberKit
 
 final class InMemoryFileSystem: FileSystem {
   var files: [File] = []
