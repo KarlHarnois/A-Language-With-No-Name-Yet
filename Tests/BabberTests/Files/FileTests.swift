@@ -11,4 +11,9 @@ final class FileTests: XCTestCase {
     expect(self.file.create(content: "hello")) != .create(content: "world")
     expect(self.file.create()) == .create()
   }
+
+  func testFullname() {
+    let actual = file.create(name: "controller", ext: "swift")
+    expect(actual.fullname) == "controller.swift"
+  }
 }
