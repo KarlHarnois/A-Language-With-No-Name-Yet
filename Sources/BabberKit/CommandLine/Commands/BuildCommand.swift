@@ -5,14 +5,14 @@ struct BuildCommand: Command {
   let fileSystem: FileSystem
 
   func run() throws {
-    let target = try requireOption(.target)
-    let compiler = try createCompiler(target: target)
+    let compiler = try compilerForTarget()
     let sourceFiles = try readSourceFiles("/src")
     let compiledFiles = try compiler.compile(sourceFiles)
     try write(compiledFiles, at: "/.build")
   }
 
-  private func createCompiler(target: String) throws -> Compiler {
+  private func compilerForTarget() throws -> Compiler {
+    let target = try requireOption(.target)
     guard target == "jvm" else {
       throw Error.invalidOption(.target, target)
     }
