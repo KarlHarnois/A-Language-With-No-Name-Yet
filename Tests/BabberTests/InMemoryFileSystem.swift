@@ -16,4 +16,7 @@ final class InMemoryFileSystem: FileSystem {
     }
     system[dir.path] = (dir: dir, files: content.files + files)
   }
+
+  func delete(_ file: File, in dir: Directory) throws {
+  }
 }

@@ -12,4 +12,12 @@ public struct Directory {
     let path = currentDirPath + relativePath
     self.init(path: path)
   }
+
+  func urlPath(for file: File) -> URL {
+    return URL(fileURLWithPath: path(for: file))
+  }
+
+  func path(for file: File) -> String {
+    return path + "/" + file.fullname
+  }
 }
